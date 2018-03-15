@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">whatsapp</string>
+    <string name="add_name">اضف اسمك</string>
+
+    <string name="online">مفتوح</string>
+    <string name="capture_photo">التقاط صوره</string>
+    <string name="capture_Video">التقاط فيديو</string>
+    <string name="no_message">لاتوجد رسائل</string>
+    <string name="start_conversation">ابدا المحادثه</string>
+
+</resources>
