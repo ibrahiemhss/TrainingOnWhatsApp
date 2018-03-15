@@ -10,6 +10,8 @@
 
 
     <TextView
+
+
         android:onClick="TakePhotoClicked"
         android:id="@+id/TakePhoto"
         android:layout_marginRight="10dp"
