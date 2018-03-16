@@ -158,6 +158,10 @@ public class MainActivity2 extends AppCompatActivity {
        messageAdapter = new MessageAdapter (this,datamodel);
         recyclerView.setAdapter (messageAdapter);
 
+        recyclerView.getLayoutManager().scrollToPosition(recyclerView.getAdapter().getItemCount()-1);
+
+
+
 
     }
     public static void showToolBar(Toolbar toolbar,
@@ -202,7 +206,7 @@ public class MainActivity2 extends AppCompatActivity {
 
         database = new MDbHelber (MainActivity2.this);
         Locale locale = new Locale (slocale);
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE/ dd/ MMM /  yyy", locale);
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE,dd,MMM, yyy", locale);
       //  SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", locale);
         Date currDate = new Date();
         String formattedDate = sdf.format(currDate);
@@ -275,7 +279,7 @@ public class MainActivity2 extends AppCompatActivity {
         message=mEtSend.getText ().toString ();
 
         Locale locale = new Locale (slocale);
-    SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyy", locale);
+    SimpleDateFormat sdf = new SimpleDateFormat("EEE,dd,MMM,yyy", locale);
        // SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", locale);
         Date currDate = new Date();
         String formattedDate = sdf.format(currDate);
@@ -336,7 +340,7 @@ public class MainActivity2 extends AppCompatActivity {
                                      Intent data) {
 
         Locale locale2 = new Locale (slocale);
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyy", locale2);
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE,dd,MMM,yyy", locale2);
         Date currDate = new Date();
         String formattedDate = sdf.format(currDate);
 

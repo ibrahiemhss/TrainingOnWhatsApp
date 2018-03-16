@@ -204,23 +204,8 @@ if(SharedPrefManager.getInstance (mContext).getOn ()==1){
 
            try{
                holder.mVideoMessage.setVideoURI(videoUri);
-               holder.mVideoMessage.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                   @Override
-                   public void onPrepared(MediaPlayer mp) {
-                       mp.setLooping(true);
-                       holder.mVideoMessage.start ();
-                       holder.mVideoMessage.setOnCompletionListener (new MediaPlayer.OnCompletionListener () {
-                           @Override
-                           public void onCompletion (MediaPlayer mediaPlayer) {
-                               holder.mVideoMessage.pause ();
+               holder.mVideoMessage.start ();
 
-                           }
-                       });
-                       holder.mVideoMessage.canPause ();
-
-
-                   }
-               });
            } catch (Exception e) {
                e.printStackTrace ();
            }

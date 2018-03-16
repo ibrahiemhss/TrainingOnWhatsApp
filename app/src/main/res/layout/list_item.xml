@@ -11,8 +11,8 @@
         android:id="@+id/rootR"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:visibility="gone"
+        android:orientation="vertical"
         android:layout_weight="1"
         android:layout_gravity="start"
         android:padding="3dp"
@@ -20,6 +20,7 @@
             <ImageView
                 android:id="@+id/mImageReply"
                 android:layout_width="150dp"
+                android:visibility="gone"
                 android:scaleType="fitXY"
                 android:layout_height="300dp" />
             <TextView
@@ -40,21 +41,25 @@
 <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_gravity="start"
+    android:orientation="horizontal"
+    android:layout_marginRight="1dp">
+    <ImageView
+        android:id="@+id/timeImageReply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_update"/>
+
     <TextView
         android:id="@+id/timeReply"
         android:layout_gravity="end"
-        android:layout_width="match_parent"
+        android:text="ffff888888888888fffff"
+        android:layout_width="200dp"
+        android:layout_weight="1"
         android:fontFamily="monospace"
-        android:text="jjjjjj"
         android:textSize="12sp"
         android:layout_height="wrap_content" />
 
-<ImageView
-    android:id="@+id/timeImageReply"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:src="@drawable/ic_update"/>
 
 </LinearLayout>
     </LinearLayout>
@@ -68,10 +73,9 @@
     android:id="@+id/rootS"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="start"
-    android:visibility="gone"
     android:gravity="end"
     android:layout_weight="1"
+    android:visibility="gone"
     android:padding="3dp"
     android:background="@drawable/yellow_back"
     android:orientation="vertical">
@@ -94,20 +98,22 @@
             android:textSize="17sp"            />
     <VideoView
         android:id="@+id/mVideoMessage"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="300dp" />
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="end"
         android:orientation="horizontal"
         android:layout_marginRight="1dp">
 
         <TextView
             android:id="@+id/mTextTime"
             android:layout_gravity="end"
-            android:text="fffffffff"
-            android:layout_width="wrap_content"
+            android:text="ffff888888888888fffff"
+            android:layout_width="200dp"
+            android:layout_weight="1"
             android:fontFamily="monospace"
             android:textSize="12sp"
             android:layout_height="wrap_content" />
