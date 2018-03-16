@@ -6,7 +6,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -17,14 +21,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.example.ibrahim.lasttrainingudacity.adapter.MessageAdapter;
 import com.example.ibrahim.lasttrainingudacity.data.MDbHelber;
@@ -40,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity2 extends AppCompatActivity {
     private static final String TAG = MainActivity2.class.getSimpleName ();
@@ -84,8 +93,10 @@ public class MainActivity2 extends AppCompatActivity {
         mImgSend = findViewById (R.id.mImgSend);
         nameProfile.setText (SharedPrefManager.getInstance (this).getNamesOfUsers ());
 
-        datamodel = new ArrayList<MessageModel> ();
+       // datamodel = new ArrayList<MessageModel> ();
         recyclerView = (RecyclerView) findViewById (R.id.mRv);
+        changeListSend ();
+
 
         try {
             Process exec = Runtime.getRuntime().exec(new String[]{"getprop", "persist.sys.language"});
@@ -100,7 +111,8 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onClick (View view) {
                 addMessag ();
-                messageAdapter.notifyDataSetChanged ();
+                changeListSend ();
+
             }
         });
 
@@ -114,7 +126,7 @@ public class MainActivity2 extends AppCompatActivity {
                         .setOnClickListener (new View.OnClickListener () {
                             @Override
                             public void onClick (View v) {
-                                activeGallery ();
+                                activeTakeVedio ();
                                 dialog.dismiss ();
 
 
@@ -133,6 +145,20 @@ public class MainActivity2 extends AppCompatActivity {
                 dialog.show ();
             }
         });
+    }
+
+    private void changeListSend () {
+
+        database = new MDbHelber (MainActivity2.this);
+        datamodel = database.getdata ();
+        Log.i ("HIteshdata", "" + datamodel);
+        RecyclerView.LayoutManager reLayoutManager = new LinearLayoutManager (getApplicationContext ());
+        recyclerView.setLayoutManager (reLayoutManager);
+        recyclerView.setItemAnimator (new DefaultItemAnimator ());
+       messageAdapter = new MessageAdapter (this,datamodel);
+        recyclerView.setAdapter (messageAdapter);
+
+
     }
     public static void showToolBar(Toolbar toolbar,
                                    final AppCompatActivity activity) {
@@ -176,7 +202,8 @@ public class MainActivity2 extends AppCompatActivity {
 
         database = new MDbHelber (MainActivity2.this);
         Locale locale = new Locale (slocale);
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyy", locale);
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE/ dd/ MMM /  yyy", locale);
+      //  SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", locale);
         Date currDate = new Date();
         String formattedDate = sdf.format(currDate);
 
@@ -248,7 +275,8 @@ public class MainActivity2 extends AppCompatActivity {
         message=mEtSend.getText ().toString ();
 
         Locale locale = new Locale (slocale);
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyy", locale);
+    SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyy", locale);
+       // SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", locale);
         Date currDate = new Date();
         String formattedDate = sdf.format(currDate);
 
@@ -257,7 +285,9 @@ public class MainActivity2 extends AppCompatActivity {
            database.insertTextWithImage (formattedDate,mEtSend.getText ().toString (),null,null,null,null,null,null);
             SharedPrefManager.getInstance (MainActivity2.this).saveOn (0);
 
-            changeListSend ();
+            messageAdapter = new MessageAdapter (this,datamodel);
+           // recyclerView.setAdapter (messageAdapter);
+            messageAdapter.notifyDataSetChanged ();
 
         }
 
@@ -265,21 +295,7 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
 
-    private void changeListSend () {
 
-        database = new MDbHelber (MainActivity2.this);
-        datamodel = database.getdata ();
-        messageAdapter = new MessageAdapter (this,datamodel);
-
-
-        Log.i ("HIteshdata", "" + datamodel);
-        RecyclerView.LayoutManager reLayoutManager = new LinearLayoutManager (getApplicationContext ());
-        recyclerView.setLayoutManager (reLayoutManager);
-        recyclerView.setItemAnimator (new DefaultItemAnimator ());
-        recyclerView.setAdapter (messageAdapter);
-
-
-    }
 
 
     private void activeTakePhoto () {
@@ -300,7 +316,7 @@ public class MainActivity2 extends AppCompatActivity {
     /**
      * to gallery
      */
-    private void activeGallery () {
+    private void activeTakeVedio () {
         Intent intent = new Intent (MediaStore.ACTION_VIDEO_CAPTURE);
         if (intent.resolveActivity (getPackageManager ()) != null) {
             String fileName = "temp.3gp";
@@ -318,7 +334,6 @@ public class MainActivity2 extends AppCompatActivity {
     @Override
     protected void onActivityResult (int requestCode, int resultCode,
                                      Intent data) {
-        MessageModel imagMessage = new MessageModel ();
 
         Locale locale2 = new Locale (slocale);
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyy", locale2);
@@ -342,7 +357,7 @@ public class MainActivity2 extends AppCompatActivity {
                     if (part_vedio != null) {
                         actualVedioFile = new File( part_vedio );
                         //mTakePhoto.setImageBitmap( BitmapFactory.decodeFile( actualVedioFile.getAbsolutePath() ) );
-                        imagMessage.setVedio (part_vedio);
+                    //    imagMessage.setVedio (part_vedio);
                         database.insertTextWithImage (formattedDate,null,null,part_vedio,null,null,null,null);
                         SharedPrefManager.getInstance (MainActivity2.this).saveOn (0);
 
@@ -370,7 +385,7 @@ public class MainActivity2 extends AppCompatActivity {
                     if (part_image != null) {
                         actualImageFile = new File( part_image );
                    //     mTakePhoto.setImageBitmap( BitmapFactory.decodeFile( actualImageFile.getAbsolutePath() ) );
-                        imagMessage.setImage (part_image);
+                  //      imagMessage.setImage (part_image);
                         database.insertTextWithImage (formattedDate,null,part_image,null,null,null,null,null);
                         SharedPrefManager.getInstance (MainActivity2.this).saveOn (0);
 
@@ -404,3 +419,4 @@ public class MainActivity2 extends AppCompatActivity {
 
 
 }
+

@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="gone"
+        android:layout_weight="1"
         android:layout_gravity="start"
         android:padding="3dp"
         android:background="@drawable/yellow_back">
@@ -27,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:text="hhhhhh"
                 android:visibility="gone"
-
+                android:inputType="textMultiLine"
                 android:fontFamily="sans-serif"
                 android:textColor="@color/colorBlack"
                 android:textSize="17sp"   />
@@ -59,7 +60,7 @@
     </LinearLayout>
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_weight="1"
+    android:layout_weight="2"
     android:layout_height="match_parent">
 
 </LinearLayout>
@@ -70,6 +71,7 @@
     android:layout_gravity="start"
     android:visibility="gone"
     android:gravity="end"
+    android:layout_weight="1"
     android:padding="3dp"
     android:background="@drawable/yellow_back"
     android:orientation="vertical">
@@ -79,7 +81,6 @@
     android:layout_width="150dp"
     android:scaleType="fitXY"
     android:visibility="gone"
-
     android:layout_height="300dp" />
 
         <TextView
@@ -87,6 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="hhhhhh"
+            android:inputType="textMultiLine"
             android:fontFamily="sans-serif"
             android:textColor="@color/colorBlack"
             android:textSize="17sp"            />

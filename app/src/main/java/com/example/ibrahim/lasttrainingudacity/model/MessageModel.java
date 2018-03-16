@@ -1,10 +1,16 @@
 package com.example.ibrahim.lasttrainingudacity.model;
 
+import android.content.Context;
+
 /**
  * Created by Administrator on 28/06/2017.
  */
 
 public class MessageModel {
+    Context context;
+
+
+
     long id;
     String message;
     String image ;
@@ -13,11 +19,21 @@ public class MessageModel {
     String vedio_reply;
     String image_reply ;
     int online;
-
-
-
-    public MessageModel () {
+    public MessageModel (Context context) {
+        this.context = context;
     }
+    public MessageModel (String time,String message, String image, String vedio, String reply, String time_reply, String image_reply,String vedio_reply) {
+        this.message = message;
+        this.image = image;
+        this.vedio = vedio;
+        this.time = time;
+        this.vedio_reply = vedio_reply;
+        this.image_reply = image_reply;
+        this.online = online;
+        this.time_reply = time_reply;
+        this.reply = reply;
+    }
+
 
 
     public String getTime () {

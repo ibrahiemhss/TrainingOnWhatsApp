@@ -22,7 +22,11 @@ import com.example.ibrahim.lasttrainingudacity.R;
 import com.example.ibrahim.lasttrainingudacity.data.SharedPrefManager;
 import com.example.ibrahim.lasttrainingudacity.model.MessageModel;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Administrator on 08/07/2017.
@@ -30,6 +34,10 @@ import java.util.List;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessegeHolder> {
     private Cursor mCursor;
+    long minutes;
+    long hours;
+    long days;
+    long second;
     private Context mContext;
     private MediaPlayer mMediaPlayer;
     AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
@@ -61,6 +69,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessegeH
 
     }
 
+    public MessageAdapter(Context context) {
+        this.mContext = context;
+
+    }
+
 
 
     @Override
@@ -75,7 +88,48 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessegeH
     @Override
     public void onBindViewHolder(final MessageAdapter.MessegeHolder holder, final int position) {
         MessageModel dataModel=dataModelArrayList.get(position);
+       /* String S= " second ago";
+        String  M= " minutes ago";
+        String H= " hours ago";
+        String D=" days ago";
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            Date past = format.parse("01/10/2010");
+            Date now = new Date();
+
+            second=TimeUnit.MILLISECONDS.toMillis(now.getTime() - past.getTime());
+            minutes=TimeUnit.MILLISECONDS.toMinutes(now.getTime() - past.getTime());
+            hours=TimeUnit.MILLISECONDS.toHours(now.getTime() - past.getTime()) ;
+            days=TimeUnit.MILLISECONDS.toDays(now.getTime() - past.getTime()) ;
+
+
+        }
+        catch (Exception j){
+            j.printStackTrace();
+        }
+        holder.mTextMessage.setText(second+S);
+
+        if (second<60){
+            holder.mTextMessage.setText(second+S);
+
+        }else if (minutes<=60){
+            holder.mTextMessage.setText(minutes+M);
+
+        }else if (hours<=24){
+            holder.mTextMessage.setText(hours+H);
+
+        }else if (days<=5){
+            holder.mTextMessage.setText(days+D);
+
+        }else {
+         //   holder.mTextTime.setText(dataModel.getTime ());
+            holder.mTextMessage.setText(second+S);
+
+        }
+*/
         holder.mTextTime.setText(dataModel.getTime ());
+
+
         String url = dataModel.getVedio();
         Bitmap bmp = BitmapFactory.decodeFile(dataModel.getImage());
         String urlR = dataModel.getVedio_reply ();
@@ -114,7 +168,10 @@ if(SharedPrefManager.getInstance (mContext).getOn ()==1){
 
 
         }else {
-            holder.mTextMessage.setText(dataModel.getMessage ());
+
+
+                holder.mTextMessage.setText(dataModel.getMessage ());
+
             holder.mTextMessage.setVisibility (View.VISIBLE);
             holder.rootS.setVisibility (View.VISIBLE);
 
@@ -224,9 +281,12 @@ if(SharedPrefManager.getInstance (mContext).getOn ()==1){
 
         LinearLayout rootR,rootS;
       private   TextView mTextTime;
-       private   TextView mTextMessage;
+       public TextView mTextMessage;
        private  VideoView mVideoMessage,mVideoReply;
-      private  ImageView mImageMessage,mImageReply, timeImageReply,timeImage;
+      private  ImageView mImageMessage;
+       private ImageView mImageReply;
+       public ImageView timeImageReply;
+       public ImageView timeImage;
        private TextView textReply;
        private   TextView timeReply;
        private MessegeHolder(View itemView) {
@@ -265,6 +325,7 @@ if(SharedPrefManager.getInstance (mContext).getOn ()==1){
             mAudioManager.abandonAudioFocus(mOnAudioFocusChangeListener);
         }
     }
+
 }
 
 

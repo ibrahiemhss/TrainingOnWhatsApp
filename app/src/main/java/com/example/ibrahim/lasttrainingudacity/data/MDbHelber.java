@@ -86,7 +86,7 @@ public class MDbHelber extends SQLiteOpenHelper {
             String image_reply = cursor.getString (cursor.getColumnIndexOrThrow (IMAGE_REPLY));
             String vedio_reply = cursor.getString (cursor.getColumnIndexOrThrow (VEDIO_REPLY));
 
-            dataModel = new MessageModel ();
+            dataModel = new MessageModel (time,message,image,vedio,reply,time_reply,image_reply,vedio_reply);
 
             dataModel.setTime (time);
             dataModel.setMessage (message);
