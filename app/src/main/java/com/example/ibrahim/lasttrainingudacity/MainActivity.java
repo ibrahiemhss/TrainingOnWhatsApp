@@ -21,9 +21,18 @@ public class MainActivity extends AppCompatActivity {
 
     public void startConveratuon (View view) {
         etName=findViewById (R.id.etName);
+        String name=etName.getText ().toString ();
+        if(name.isEmpty ()){
+       //     Toast.makeText (MainActivity.this,"من فضلك ادخل اسمك",Toast.LENGTH_SHORT).show ();
+            System.out.println("من فضلك ادخل اسمك");
+
+        }else{
             SharedPrefManager.getInstance (this).saveNamesOfUsers (etName.getText ().toString ());
             Intent intent=new Intent(this, MainActivity2.class);
             startActivity(intent);
+            etName.setText ("");
+
+        }
 
     }
 }

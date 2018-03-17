@@ -13,6 +13,9 @@ public class Contract {
 
 
         public static final String TAG = "MyMessag";
+      //  public static final String DATE_TIME_FORMATE = "dd/MM/yyyy";
+      //public static final String DATE_TIME_FORMATE = "EEE,dd,MMM,yyy";
+      public static final String DATE_TIME_FORMATE = "EEE,dd,MMM,yyy  HH:mm";
 
         public static final String DATABASE_NAME = "whatsapp";
         public static final String TABLE = "users";

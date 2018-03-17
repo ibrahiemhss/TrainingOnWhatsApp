@@ -4,77 +4,56 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.ParseException;
 import android.net.Uri;
+import android.os.Build;
+import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
+import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.VideoView;
-
-
-import com.example.ibrahim.lasttrainingudacity.MainActivity2;
 import com.example.ibrahim.lasttrainingudacity.R;
 import com.example.ibrahim.lasttrainingudacity.data.SharedPrefManager;
 import com.example.ibrahim.lasttrainingudacity.model.MessageModel;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-
-/**
- * Created by Administrator on 08/07/2017.
- */
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessegeHolder> {
-    private Cursor mCursor;
     long minutes;
     long hours;
     long days;
     long second;
+    private boolean bVideoIsBeingTouched = false;
+    private int position = 0;
+    //MediaController to controll the videoes play and  pause
+    private MediaController mediaControlsS,mediaControlsR;
     private Context mContext;
-    private MediaPlayer mMediaPlayer;
-    AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
-        @Override
-        public void onAudioFocusChange(int focusChange) {
-            if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT ||
-                    focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
-
-                mMediaPlayer.pause();
-                mMediaPlayer.seekTo(0);
-            } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-                // The AUDIOFOCUS_GAIN case means we have regained focus and can resume playback.
-                mMediaPlayer.start();
-            } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
-                // The AUDIOFOCUS_LOSS case means we've lost audio focus and
-                // Stop playback and clean up resources
-
-            }
-        }
-    };
-    /** Handles audio focus when playing a sound file */
-    private AudioManager mAudioManager;
+   private String mlocale;
+  private   String mDatRply,mDateMessage;
 
     List<MessageModel> dataModelArrayList;
-
+//constructor
     public MessageAdapter(Context context,List<MessageModel> dataModelArrayList) {
         this.dataModelArrayList = dataModelArrayList;
         this.mContext = context;
 
     }
-
-    public MessageAdapter(Context context) {
-        this.mContext = context;
-
-    }
-
-
 
     @Override
     public MessegeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -86,8 +65,20 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessegeH
     }
 
     @Override
-    public void onBindViewHolder(final MessageAdapter.MessegeHolder holder, final int position) {
+    public void onBindViewHolder(final MessegeHolder holder, final int position) {
+
+        // عمل كائن جديد من MessageModel وتخزين مواضع كل عناصر الكائن  dataModelArrayList
         MessageModel dataModel=dataModelArrayList.get(position);
+
+
+        try {
+            Process exec = Runtime.getRuntime().exec(new String[]{"getprop", "persist.sys.language"});
+            mlocale = new BufferedReader (new InputStreamReader (exec.getInputStream())).readLine();
+            exec.destroy();
+            Log.e("", "Device locale: "+mlocale);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
        /* String S= " second ago";
         String  M= " minutes ago";
         String H= " hours ago";
@@ -127,7 +118,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessegeH
 
         }
 */
-        holder.mTextTime.setText(dataModel.getTime ());
+       //to set the time from  MessageModel
+       // holder.mTextTime.setText(dataModel.getTime ());
+
+            holder.mTextTime.setText (dataModel.getTime ());
+
 
 
         String url = dataModel.getVedio();
@@ -196,19 +191,50 @@ if(SharedPrefManager.getInstance (mContext).getOn ()==1){
 
 
        }else {
+
            Uri videoUri = Uri.parse(url);
-           holder.mVideoMessage.setVideoURI(videoUri);
 
            holder.mVideoMessage.setVisibility (View.VISIBLE);
            holder.rootS.setVisibility (View.VISIBLE);
 
-           try{
-               holder.mVideoMessage.setVideoURI(videoUri);
-               holder.mVideoMessage.start ();
+               if (mediaControlsS == null)
+               {
+                   mediaControlsS = new MediaController(mContext);
+               }
 
-           } catch (Exception e) {
-               e.printStackTrace ();
-           }
+               try
+               {
+                   holder.mVideoMessage.setMediaController(mediaControlsS);
+                   holder.mVideoMessage.setVideoURI(videoUri);
+
+               } catch (Exception e)
+               {
+                   Log.e("Error", e.getMessage());
+                   e.printStackTrace();
+               }
+
+               holder.mVideoMessage.requestFocus();
+           holder.mVideoMessage.setOnPreparedListener(new MediaPlayer.OnPreparedListener ()
+           {
+
+               public void onPrepared(MediaPlayer mediaPlayer)
+               {
+
+                   holder.mVideoMessage.seekTo(position);
+
+                   System.out.println("vidio is ready for playing");
+
+                   if (position == 0)
+                   {
+                       holder.mVideoMessage.start();
+                   } else
+                   {
+                       holder.mVideoMessage.pause();
+                   }
+               }
+           });
+
+
        }
 
         if(dataModel.getImage_reply ()==null){
@@ -231,21 +257,45 @@ if(SharedPrefManager.getInstance (mContext).getOn ()==1){
         }else {
             holder.mVideoReply.setVisibility (View.VISIBLE);
             holder.rootR.setVisibility (View.VISIBLE);
+            Uri videoUri = Uri.parse(urlR);
 
-
-            try{
-                Uri videoUri = Uri.parse(urlR);
-                holder.mVideoReply.setVideoURI(videoUri);
-                holder.mVideoReply.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                    @Override
-                    public void onPrepared(MediaPlayer mp) {
-                        mp.setLooping(true);
-                        holder.mVideoReply.start();
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace ();
+            if (mediaControlsR == null)
+            {
+                mediaControlsR = new MediaController(mContext);
             }
+            try
+            {
+                holder.mVideoReply.setMediaController(mediaControlsR);
+                holder.mVideoReply.setVideoURI(videoUri);
+
+            } catch (Exception e)
+            {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+
+            holder.mVideoReply.requestFocus();
+            holder.mVideoReply.setOnPreparedListener(new MediaPlayer.OnPreparedListener ()
+            {
+
+                public void onPrepared(MediaPlayer mediaPlayer)
+                {
+
+                    holder.mVideoReply.seekTo(position);
+
+                    System.out.println("vidio is ready for playing");
+
+                    if (position == 0)
+                    {
+                        holder.mVideoReply.start();
+                    } else
+                    {
+                        holder.mVideoReply.pause();
+                    }
+                }
+            });
+
+
         }
     }
 
@@ -265,7 +315,7 @@ if(SharedPrefManager.getInstance (mContext).getOn ()==1){
    public class MessegeHolder extends RecyclerView.ViewHolder  {
 
         LinearLayout rootR,rootS;
-      private   TextView mTextTime;
+      private TextView mTextTime;
        public TextView mTextMessage;
        private  VideoView mVideoMessage,mVideoReply;
       private  ImageView mImageMessage;
@@ -293,25 +343,12 @@ if(SharedPrefManager.getInstance (mContext).getOn ()==1){
            timeImage = itemView.findViewById (R.id.timeImage);
        }
 
-   }    private void releaseMediaPlayer() {
-        // If the media player is not null, then it may be currently playing a sound.
-        if (mMediaPlayer != null) {
-            // Regardless of the current state of the media player, release its resources
-            // because we no longer need it.
-            mMediaPlayer.release();
+   }
 
-            // Set the media player back to null. For our code, we've decided that
-            // setting the media player to null is an easy way to tell that the media player
-            // is not configured to play an audio file at the moment.
-            mMediaPlayer = null;
 
-            // Regardless of whether or not we were granted audio focus, abandon it. This also
-            // unregisters the AudioFocusChangeListener so we don't get anymore callbacks.
-            mAudioManager.abandonAudioFocus(mOnAudioFocusChangeListener);
-        }
     }
 
-}
+
 
 
 

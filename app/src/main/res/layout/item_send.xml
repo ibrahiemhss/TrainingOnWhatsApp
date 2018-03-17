@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/rootR"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:visibility="gone"
+    android:orientation="vertical"
+    android:layout_weight="1"
+    android:layout_gravity="start"
+    android:padding="3dp"
+    android:background="@drawable/yellow_back"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView
+        android:id="@+id/mImageReply"
+        android:layout_width="150dp"
+        android:visibility="gone"
+        android:scaleType="fitXY"
+        android:layout_height="300dp" />
+    <TextView
+        android:id="@+id/textReply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="hhhhhh"
+        android:visibility="gone"
+        android:inputType="textMultiLine"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/colorBlack"
+        android:textSize="17sp"   />
+    <GestureOverlayView
+        android:id="@+id/mVideoReply"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="300dp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:orientation="horizontal"
+        android:layout_marginRight="1dp">
+        <ImageView
+            android:id="@+id/timeImageReply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_update"/>
+
+        <TextView
+            android:id="@+id/timeReply"
+            android:layout_gravity="end"
+            android:text="ffff888888888888fffff"
+            android:layout_width="200dp"
+            android:layout_weight="1"
+            android:fontFamily="monospace"
+            android:textSize="12sp"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+</LinearLayout>

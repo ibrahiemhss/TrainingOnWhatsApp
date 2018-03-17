@@ -10,6 +10,7 @@ import android.util.Log;
 import com.example.ibrahim.lasttrainingudacity.model.MessageModel;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.example.ibrahim.lasttrainingudacity.data.Contract.Entry.DATABASE_NAME;
@@ -77,7 +78,7 @@ public class MDbHelber extends SQLiteOpenHelper {
         StringBuffer stringBuffer = new StringBuffer ();
         MessageModel dataModel = null;
         while (cursor.moveToNext ()) {
-            String time = cursor.getString (cursor.getColumnIndexOrThrow (TIME));
+             String time = cursor.getString (cursor.getColumnIndexOrThrow (TIME));
             String message = cursor.getString (cursor.getColumnIndexOrThrow (MESSAGE));
             String image = cursor.getString (cursor.getColumnIndexOrThrow (IMAGE));
             String vedio = cursor.getString (cursor.getColumnIndexOrThrow (VEDIO));

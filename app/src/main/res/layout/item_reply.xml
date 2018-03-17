@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/rootS"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="end"
+    android:layout_weight="1"
+    android:visibility="gone"
+    android:padding="3dp"
+    android:background="@drawable/yellow_back"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:id="@+id/mImageMessage"
+        android:layout_width="150dp"
+        android:scaleType="fitXY"
+        android:visibility="gone"
+        android:layout_height="300dp" />
+
+    <TextView
+        android:id="@+id/mTextMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="hhhhhh"
+        android:inputType="textMultiLine"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/colorBlack"
+        android:textSize="17sp"            />
+    <VideoView
+        android:id="@+id/mVideoMessage"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="300dp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:orientation="horizontal"
+        android:layout_marginRight="1dp">
+
+        <TextView
+            android:id="@+id/mTextTime"
+            android:layout_gravity="end"
+            android:text="ffff888888888888fffff"
+            android:layout_width="200dp"
+            android:layout_weight="1"
+            android:fontFamily="monospace"
+            android:textSize="12sp"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/timeImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_update"/>
+
+    </LinearLayout>
+</LinearLayout>

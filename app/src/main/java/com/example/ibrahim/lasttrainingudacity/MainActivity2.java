@@ -50,6 +50,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import static com.example.ibrahim.lasttrainingudacity.data.Contract.Entry.DATE_TIME_FORMATE;
+
 public class MainActivity2 extends AppCompatActivity {
     private static final String TAG = MainActivity2.class.getSimpleName ();
     private static final int RESULT_VEDIO_CAPTURE = 1;
@@ -148,10 +150,8 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     private void changeListSend () {
-
         database = new MDbHelber (MainActivity2.this);
         datamodel = database.getdata ();
-        Log.i ("HIteshdata", "" + datamodel);
         RecyclerView.LayoutManager reLayoutManager = new LinearLayoutManager (getApplicationContext ());
         recyclerView.setLayoutManager (reLayoutManager);
         recyclerView.setItemAnimator (new DefaultItemAnimator ());
@@ -159,9 +159,6 @@ public class MainActivity2 extends AppCompatActivity {
         recyclerView.setAdapter (messageAdapter);
 
         recyclerView.getLayoutManager().scrollToPosition(recyclerView.getAdapter().getItemCount()-1);
-
-
-
 
     }
     public static void showToolBar(Toolbar toolbar,
@@ -205,38 +202,33 @@ public class MainActivity2 extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         database = new MDbHelber (MainActivity2.this);
-        Locale locale = new Locale (slocale);
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE,dd,MMM, yyy", locale);
-      //  SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", locale);
-        Date currDate = new Date();
-        String formattedDate = sdf.format(currDate);
 
 
         int id = item.getItemId();
 
         if (id == R.id.action_done) {
-            if(message!=null){
+         String    SSS=SharedPrefManager.getInstance (this).getPeply ();
+
+            if(SSS!=null){
                 SharedPrefManager.getInstance (MainActivity2.this).saveOn (0);
                 database.insertTextWithImage (null,null,null,
-                        null,SharedPrefManager.getInstance (this).getPeply (),formattedDate,null,null);
+                        null,SSS,detDate(),null,null);
                 changeListSend ();
 
-                message=null;
+                SharedPrefManager.getInstance (this).saveReply (null);
 
             }else if(part_image!=null) {
                 SharedPrefManager.getInstance (MainActivity2.this).saveOn (0);
-
                 database.insertTextWithImage (null,null,null,
-                        null,null,formattedDate,part_image,null);
+                        null,null,detDate(),part_image,null);
                 part_image=null;
                 changeListSend ();
 
             }
             else if(part_vedio!=null) {
                 SharedPrefManager.getInstance (MainActivity2.this).saveOn (0);
-
                 database.insertTextWithImage (null,null,null,
-                        null,null,formattedDate,null,part_vedio);
+                        null,null,detDate(),null,part_vedio);
                 part_vedio=null;
                 changeListSend ();
 
@@ -278,21 +270,18 @@ public class MainActivity2 extends AppCompatActivity {
         mEtSend = findViewById (R.id.mEtSend);
         message=mEtSend.getText ().toString ();
 
-        Locale locale = new Locale (slocale);
-    SimpleDateFormat sdf = new SimpleDateFormat("EEE,dd,MMM,yyy", locale);
-       // SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", locale);
-        Date currDate = new Date();
-        String formattedDate = sdf.format(currDate);
+        if(message.isEmpty ()) {
+          Toast.makeText (MainActivity2.this,"add_message",Toast.LENGTH_SHORT).show ();
 
-        if(message!=null) {
+        }else {
             SharedPrefManager.getInstance (this).saveReply (message);
-           database.insertTextWithImage (formattedDate,mEtSend.getText ().toString (),null,null,null,null,null,null);
+            database.insertTextWithImage (detDate(),mEtSend.getText ().toString (),null,null,null,null,null,null);
             SharedPrefManager.getInstance (MainActivity2.this).saveOn (0);
 
             messageAdapter = new MessageAdapter (this,datamodel);
-           // recyclerView.setAdapter (messageAdapter);
+            // recyclerView.setAdapter (messageAdapter);
             messageAdapter.notifyDataSetChanged ();
-
+            mEtSend.setText ("");
         }
 
         mEtSend.clearFocus ();
@@ -339,10 +328,6 @@ public class MainActivity2 extends AppCompatActivity {
     protected void onActivityResult (int requestCode, int resultCode,
                                      Intent data) {
 
-        Locale locale2 = new Locale (slocale);
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE,dd,MMM,yyy", locale2);
-        Date currDate = new Date();
-        String formattedDate = sdf.format(currDate);
 
         super.onActivityResult (requestCode, resultCode, data);
         switch (requestCode) {
@@ -362,11 +347,11 @@ public class MainActivity2 extends AppCompatActivity {
                         actualVedioFile = new File( part_vedio );
                         //mTakePhoto.setImageBitmap( BitmapFactory.decodeFile( actualVedioFile.getAbsolutePath() ) );
                     //    imagMessage.setVedio (part_vedio);
-                        database.insertTextWithImage (formattedDate,null,null,part_vedio,null,null,null,null);
+                        database.insertTextWithImage (detDate(),null,null,part_vedio,null,null,null,null);
                         SharedPrefManager.getInstance (MainActivity2.this).saveOn (0);
 
                         changeListSend ();
-                        Log.v("formattedDate",formattedDate);
+                        Log.v("formattedDate",detDate());
 
 
                     }
@@ -390,7 +375,7 @@ public class MainActivity2 extends AppCompatActivity {
                         actualImageFile = new File( part_image );
                    //     mTakePhoto.setImageBitmap( BitmapFactory.decodeFile( actualImageFile.getAbsolutePath() ) );
                   //      imagMessage.setImage (part_image);
-                        database.insertTextWithImage (formattedDate,null,part_image,null,null,null,null,null);
+                        database.insertTextWithImage (detDate(),null,part_image,null,null,null,null,null);
                         SharedPrefManager.getInstance (MainActivity2.this).saveOn (0);
 
                         changeListSend ();
@@ -420,7 +405,15 @@ public class MainActivity2 extends AppCompatActivity {
                     savedInstanceState.getString ("mCapturedImageURI"));
         }
     }
+public  String detDate(){
 
+    Locale locale = new Locale (slocale);
+    SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMATE, locale);
+    // SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", locale);
+    Date currDate = new Date();
+    String formattedDate = sdf.format(currDate);
+return formattedDate;
+}
 
 }
 
