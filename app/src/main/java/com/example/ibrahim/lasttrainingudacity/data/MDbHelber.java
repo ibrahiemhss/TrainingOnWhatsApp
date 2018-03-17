@@ -43,7 +43,7 @@ public class MDbHelber extends SQLiteOpenHelper {
     public void onCreate (SQLiteDatabase sqLiteDatabase) {
         final String CREATE_TB_SEND =
                 "CREATE TABLE " + TABLE + "(" +
-                        ID + " INTEGER AUTO INCREMENT  PRIMARY KEY , " +
+                        ID + " INTEGER  PRIMARY KEY AUTOINCREMENT , " +
                         TIME + " VARCHAR(60) , " +
                         TIME_REPLY + " VARCHAR(60) , " +
                         MESSAGE + " TEXT ," +
